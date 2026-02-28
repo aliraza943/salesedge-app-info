@@ -120,7 +120,7 @@ const PrivacyPolicy = () => {
               practices, please contact us at:
             </p>
             <p className="mt-2">
-              <strong>Email:</strong> support@salesedgeapp.com
+              <strong>Email:</strong> lifeandltd@gmail.com
             </p>
             <p className="text-sm text-muted-foreground mt-4">
               Last updated: February 2026
