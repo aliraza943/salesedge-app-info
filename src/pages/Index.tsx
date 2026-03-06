@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const features = [
   "RFP Tracking & Management",
@@ -15,6 +21,25 @@ const features = [
 ];
 
 const Index = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [sending, setSending] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    emailjs
+      .sendForm("service_9pynseu", "template_xeg0nku", formRef.current!, "bCJOsNOOJfqs6otL0")
+      .then(() => {
+        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+        formRef.current?.reset();
+      })
+      .catch(() => {
+        toast({ title: "Failed to send", description: "Please try again later.", variant: "destructive" });
+      })
+      .finally(() => setSending(false));
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero */}
@@ -26,8 +51,8 @@ const Index = () => {
           The Ultimate Sales Command Center for Insurance Professionals
         </p>
         <p className="text-base text-muted-foreground leading-relaxed">
-          SalesEdge is a mobile sales productivity app built for insurance professionals. 
-          Manage your entire sales workflow — from RFP creation to closed deals — all in one place. 
+          SalesEdge is a mobile sales productivity app built for insurance professionals.
+          Manage your entire sales workflow — from RFP creation to closed deals — all in one place.
           Stay organized, hit your goals, and close more business with powerful AI-assisted tools.
         </p>
       </header>
@@ -46,6 +71,32 @@ const Index = () => {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Contact Us */}
+      <section className="px-6 py-16">
+        <div className="max-w-xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-8 text-center">
+            Contact Us
+          </h2>
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="user_name" className="block text-sm font-medium text-foreground mb-1">Name</label>
+              <Input id="user_name" name="user_name" required placeholder="Your name" />
+            </div>
+            <div>
+              <label htmlFor="user_email" className="block text-sm font-medium text-foreground mb-1">Email</label>
+              <Input id="user_email" name="user_email" type="email" required placeholder="you@example.com" />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1">Message</label>
+              <Textarea id="message" name="message" required placeholder="How can we help?" rows={5} />
+            </div>
+            <Button type="submit" disabled={sending} className="w-full">
+              {sending ? "Sending..." : "Send Message"}
+            </Button>
+          </form>
         </div>
       </section>
 
