@@ -64,6 +64,25 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
+### Deploying to GitHub Pages
+
+1. Make sure the `homepage` field in `package.json` is set to
+   `https://<USERNAME>.github.io/salesedge-app-info` (replace `<USERNAME>` with your GitHub username).
+2. The Vite config already uses a `base` of `/salesedge-app-info/` for
+   production builds.
+3. Install the `gh-pages` dev dependency (already added) and then run:
+   ```sh
+   npm run deploy
+   ```
+   This will build the project and publish the `dist` folder to the
+   `gh-pages` branch.
+4. In your repository settings on GitHub, enable GitHub Pages and select
+   the `gh-pages` branch as the source. Your site should be available at
+   the URL from step 1 after a few minutes.
+
+> ⚠️ Remember to commit and push your changes before running the deploy
+> script.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!

@@ -5,6 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // use a base path when deploying to GitHub Pages (repo name)
+  base: mode === "production" ? "/salesedge-app-info/" : "/",
   server: {
     host: "::",
     port: 8080,
