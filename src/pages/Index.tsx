@@ -28,16 +28,43 @@ const Index = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
+
+    if (!formRef.current) return;
+
+    // Add a hidden input for the time field
+    const timeInput = document.createElement("input");
+    timeInput.type = "hidden";
+    timeInput.name = "time";
+    timeInput.value = new Date().toLocaleString();
+    formRef.current.appendChild(timeInput);
+
     emailjs
-      .sendForm("service_9pynseu", "template_xeg0nku", formRef.current!, "bCJOsNOOJfqs6otL0")
+      .sendForm(
+        "service_9pynseu",
+        "template_xeg0nku",
+        formRef.current,
+        "bCJOsNOOJfqs6otL0"
+      )
       .then(() => {
-        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+        toast({
+          title: "Message sent!",
+          description: "We'll get back to you soon.",
+        });
         formRef.current?.reset();
       })
-      .catch(() => {
-        toast({ title: "Failed to send", description: "Please try again later.", variant: "destructive" });
+      .catch((error) => {
+        console.error(error);
+        toast({
+          title: "Failed to send",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
       })
-      .finally(() => setSending(false));
+      .finally(() => {
+        setSending(false);
+        // Remove the hidden time input to avoid duplicate on next submit
+        timeInput.remove();
+      });
   };
 
   return (
@@ -82,15 +109,21 @@ const Index = () => {
           </h2>
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="user_name" className="block text-sm font-medium text-foreground mb-1">Name</label>
+              <label htmlFor="user_name" className="block text-sm font-medium text-foreground mb-1">
+                Name
+              </label>
               <Input id="user_name" name="user_name" required placeholder="Your name" />
             </div>
             <div>
-              <label htmlFor="user_email" className="block text-sm font-medium text-foreground mb-1">Email</label>
+              <label htmlFor="user_email" className="block text-sm font-medium text-foreground mb-1">
+                Email
+              </label>
               <Input id="user_email" name="user_email" type="email" required placeholder="you@example.com" />
             </div>
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1">Message</label>
+              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1">
+                Message
+              </label>
               <Textarea id="message" name="message" required placeholder="How can we help?" rows={5} />
             </div>
             <Button type="submit" disabled={sending} className="w-full">
